@@ -32,11 +32,18 @@ Route::put('stock_management/creteOredit/update/{id}', [StockManagement::class,'
 // ------------------ ORDER HISTORY    -----------------------------
 // -----------------------------------------------------------------
 
+Route::get('cashier_report', [Cashier::class, 'report'])->name('report')->middleware(['auth', 'verified']);
+
+// -----------------------------------------------------------------
+// ------------------ ORDER HISTORY    -----------------------------
+// -----------------------------------------------------------------
+
 Route::get('order_history', [Cashier::class,'orderHistory'])->name('order_history')->middleware(['auth', 'verified']);
 
 // -------------------------------------------------------------------------------------
 // -------------------------------------- CASHIER --------------------------------------
 // -------------------------------------------------------------------------------------
+
 Route::get('cashier', [Cashier::class,'index'])->name('cashier')->middleware(['auth', 'verified']);
 
 Route::post('checkout', [Cashier::class,'order'])->name('checkout')->middleware(['auth', 'verified']);

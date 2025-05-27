@@ -19,7 +19,7 @@
                     <flux:navlist.item icon="shopping-cart" :href="route('cashier')" :current="request()->routeIs('cashier')" wire:navigate>{{ __('Cashier') }}</flux:navlist.item>
                     <flux:navlist.item icon="shopping-bag" :href="route('order_history')" :current="request()->routeIs('order_history')" wire:navigate>{{ __('Orders') }}</flux:navlist.item>
                     <flux:navlist.item icon="document-chart-bar" :href="route('stock_management')" :current="request()->routeIs('stock_management')" wire:navigate>{{ __('Stock Management') }}</flux:navlist.item>
-                    <flux:navlist.item icon="document-currency-dollar" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Sales Report') }}</flux:navlist.item>
+                    <flux:navlist.item icon="document-currency-dollar" :href="route('report')" :current="request()->routeIs('cashier_report')" wire:navigate>{{ __('Sales Report') }}</flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 

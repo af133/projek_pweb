@@ -55,4 +55,68 @@ class Cashier extends Controller
         
         return view('cashier.order', compact('orders'));
     }
+    public function report(Request $request)
+    {
+        $year = $request->get('year', now()->year);
+        $range = $request->get('range', 'week');
+
+        $startOfWeek = now()->startOfWeek();
+        $endOfWeek = now()->endOfWeek();
+
+        $topItems = DetailOrder::with('item')
+            ->whereHas('order', fn($q) => $q->whereBetween('order_date', [$startOfWeek, $endOfWeek]))
+            ->selectRaw('item_id, SUM(purchase_quantity) as total')
+            ->groupBy('item_id')
+            ->orderByDesc('total')
+            ->take(5)
+            ->get();
+
+        $pieLabels = $topItems->pluck('item.item_name');
+        $pieCounts = $topItems->pluck('total');
+
+        $incomeLabels = [];
+        $incomeData = [];
+
+        if ($range === 'week') {
+            foreach (range(0, 6) as $i) {
+                $date = now()->startOfWeek()->addDays($i);
+                $label = $date->format('D');
+                $total = Order::whereDate('order_date', $date)
+                    ->with('detail_order.item')
+                    ->get()
+                    ->flatMap(fn($order) => $order->detail_order)
+                    ->sum(fn($d) => $d->purchase_quantity * $d->item->price);
+
+                $incomeLabels[] = $label;
+                $incomeData[] = $total;
+            }
+        } elseif ($range === 'month') {
+            foreach (range(1, 12) as $m) {
+                $label = Carbon::create()->month($m)->format('M');
+                $total = Order::whereYear('order_date', $year)
+                    ->whereMonth('order_date', $m)
+                    ->with('detail_order.item')
+                    ->get()
+                    ->flatMap(fn($order) => $order->detail_order)
+                    ->sum(fn($d) => $d->purchase_quantity * $d->item->price);
+
+                $incomeLabels[] = $label;
+                $incomeData[] = $total;
+            }
+        } elseif ($range === 'year') {
+            foreach (range($year - 5, $year) as $y) {
+                $label = (string) $y;
+                $total = Order::whereYear('order_date', $y)
+                    ->with('detail_order.item')
+                    ->get()
+                    ->flatMap(fn($order) => $order->detail_order)
+                    ->sum(fn($d) => $d->purchase_quantity * $d->item->price);
+
+                $incomeLabels[] = $label;
+                $incomeData[] = $total;
+            }
+        }
+
+        return view('cashier.report', compact('pieLabels', 'pieCounts', 'incomeLabels', 'incomeData'));
+    }
 }
