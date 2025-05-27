@@ -33,6 +33,8 @@ Route::put('stock_management/creteOredit/update/{id}', [StockManagement::class,'
 // -------------------------------------------------------------------------------------
 Route::get('cashier', [Cashier::class,'index'])->name('cashier')->middleware(['auth', 'verified']);
 
+Route::post('checkout', [Cashier::class,'order'])->name('checkout')->middleware(['auth', 'verified']);
+
 // -------------------------------------------------------------------------------------------
 // ------------------------------ AUTENTIFICATION  -------------------------------------------
 // -------------------------------------------------------------------------------------------

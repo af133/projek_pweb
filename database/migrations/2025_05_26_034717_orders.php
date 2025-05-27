@@ -16,8 +16,6 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->timestamp('order_date')->useCurrent();
-
-
         });
     }
 
