@@ -1,64 +1,40 @@
 document.addEventListener('DOMContentLoaded', function () {
-
     const closeButton = document.getElementById('close');
-
     const countElement = document.getElementById('countOrders');
-
     const priceProductElement = document.getElementById('totalPrice');
-
     const countOrderFix = document.getElementById('countOrderFix');
-
     const priceOrderFix = document.getElementById('priceOrderFix');
-
     const addOrderButton = document.getElementById('addOrder');
-
     const totalPriceElement = document.querySelector('.totalPriceFix');
-
     const ordersInput = document.getElementById('ordersInput');
-
     const totalPriceInput = document.getElementById('totalPriceInput');
 
     let price = 0;
-
     let orders = [];
+    let selectedProductId = null;
 
     closeButton.addEventListener('click', function () {
-
         document.getElementById('order').classList.add('hidden');
-
     });
-
 
     countElement.addEventListener('input', () => {
         const newCount = parseInt(countElement.value) || 1;
-
         const newTotal = price * newCount;
-
         priceProductElement.innerText = newTotal;
-
         countOrderFix.innerText = newCount;
-
         priceOrderFix.innerText = newTotal;
-
     });
-    let selectedProductId = null;
 
-    window.orderNow = function (id,productName, productImageSrc, productPrice) {
-
+    window.orderNow = function (id, productName, productImageSrc, productPrice) {
         const orderElement = document.getElementById('order');
-
         const nameProductElement = document.getElementById('nameProduct');
-
         const imageProductElement = document.getElementById('productImageOrder');
-
         const nameProductFix = document.getElementById('nameProductFix');
-
         const imgOrderFix = document.getElementById('imgOrderFix');
-        
+
         if (orderElement.classList.contains('hidden')) {
-            
             orderElement.classList.remove('hidden');
-            selectedProductId = id;;
+            selectedProductId = id;
             price = parseInt(productPrice);
             nameProductElement.innerText = productName;
             imageProductElement.src = productImageSrc;
@@ -68,23 +44,14 @@ document.addEventListener('DOMContentLoaded', function () {
             imgOrderFix.src = productImageSrc;
             countOrderFix.innerText = 1;
             priceOrderFix.innerText = price;
-
-        } 
-        
-        else {
-
+        } else {
             orderElement.classList.add('hidden');
-
         }
     };
 
-
     function renderOrderChart() {
-
         const container = document.getElementById('orderChartContainer');
-
         container.innerHTML = '';
-
         let total = 0;
 
         orders.forEach((order, index) => {
@@ -115,58 +82,44 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </div>
             `;
-        container.insertAdjacentHTML('beforeend', chartHTML);
-        total += order.price * order.count;
-    });
-
-    totalPriceElement.innerText = `Rp ${total.toLocaleString()}`;
-
-    ordersInput.value = JSON.stringify(orders);
-
-    totalPriceInput.value = total;
-
-    document.querySelectorAll('.removeOrder').forEach(button => {
-
-            button.addEventListener('click', function () {
-
-                const index = this.getAttribute('data-index');
-
-                orders.splice(index, 1);
-
-                renderOrderChart();
-            });
+            container.insertAdjacentHTML('beforeend', chartHTML);
+            total += order.price * order.count;
         });
+
+        totalPriceElement.innerText = `Rp ${total.toLocaleString()}`;
+        ordersInput.value = JSON.stringify(orders);
+        totalPriceInput.value = total;
     }
 
+    // ⛳ Pindahkan event listener ini ke luar renderOrderChart
+    document.getElementById('orderChartContainer').addEventListener('click', function (e) {
+        if (e.target.classList.contains('removeOrder')) {
+            const index = e.target.getAttribute('data-index');
+            orders.splice(index, 1);
+            renderOrderChart();
+        }
+    });
+
     addOrderButton.addEventListener('click', function () {
-         const id = selectedProductId;
-
+        const id = selectedProductId;
         const name = document.getElementById('nameProduct').innerText;
-
         const image = document.getElementById('productImageOrder').src;
-
         const count = parseInt(document.getElementById('countOrders').value) || 1;
-
         const price = parseInt(document.getElementById('totalPrice').innerText.replace(/[^0-9]/g, '')) || 0;
 
-         orders.push({ id, name, image, count, price }); 
-
+        orders.push({ id, name, image, count, price });
         renderOrderChart();
+        document.getElementById('order').classList.add('hidden');
     });
 
     document.getElementById('checkoutForm').addEventListener('submit', function (e) {
-        if (orders.length === 0) {
+        if (orders.length <= 0) {
             e.preventDefault();
             alert('Keranjang kosong! Silakan tambahkan barang.');
             return;
         }
-
         ordersInput.value = JSON.stringify(orders);
-
         const total = orders.reduce((sum, item) => sum + item.price * item.count, 0);
-
         totalPriceInput.value = total;
-        
     });
-
 });
