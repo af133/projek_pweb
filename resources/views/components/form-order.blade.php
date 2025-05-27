@@ -1,4 +1,4 @@
-<div id="order" class=" hidden left-[40%]  h-[80%] w-[23rem] shadow-2xl bg-white rounded-lg border-2  p-2 overflow-y-auto z-50 fixed top-[5rem] border-[#D1293F] text-zinc-950">
+<div id="order" class="hidden  left-[40%]  h-[80%] w-[23rem] shadow-2xl bg-white rounded-lg border-2  p-2 overflow-y-auto z-50 fixed top-[5rem] border-[#D1293F] text-zinc-950">
     <div class="flex justify-end">
         <button id="close" class="text-white font-bold cursor-pointer bg-[#D1293F] w-[3rem] text-center h-[2rem] rounded-lg">X</button>
     </div>
@@ -40,7 +40,6 @@
         <form  class="flex-1 flex justify-center items-center" id="checkoutForm" method="POST" action="{{ route('checkout') }}">
             @csrf
             <input type="hidden" name="orders" id="ordersInput">
-            <input type="hidden" name="total_price" id="totalPriceInput">
             <button type="submit" class="border-2 bg-[#D1293F] text-white font-bold py-2 px-4 rounded-md hover:bg-transparent hover:border-2 hover:border-[#D1293F] hover:text-[#D1293F] w-[8rem]">
                 Checkout
             </button>

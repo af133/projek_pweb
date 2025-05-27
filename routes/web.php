@@ -28,6 +28,12 @@ Route::post('stock_management/creteOredit/store', [StockManagement::class,'creat
 
 Route::put('stock_management/creteOredit/update/{id}', [StockManagement::class,'createOrupdate'])->name('stock_management.update');
 
+// -----------------------------------------------------------------
+// ------------------ ORDER HISTORY    -----------------------------
+// -----------------------------------------------------------------
+
+Route::get('order_history', [Cashier::class,'orderHistory'])->name('order_history')->middleware(['auth', 'verified']);
+
 // -------------------------------------------------------------------------------------
 // -------------------------------------- CASHIER --------------------------------------
 // -------------------------------------------------------------------------------------

@@ -6,13 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetailOrder extends Model
 {
+    public $timestamps = false; 
     protected $fillable=[
         'order_id','item_id','purchase_quantity'
     ];
     public function order(){
-        return $this->hasMany(Order::class,'order_id');
+        return $this->belongsTo(Order::class,'order_id');
     }
     public function item(){
-        return $this->hasMany(Item::class,'item_id');
+        return $this->belongsTo(Item::class,'item_id');
     }
 }

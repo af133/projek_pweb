@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Models\Item;
+use App\Models\Order;
+use App\Models\DetailOrder;
+use Illuminate\Support\Carbon;
 use Illuminate\Http\Request;
 
 class Cashier extends Controller
@@ -18,25 +21,38 @@ class Cashier extends Controller
     }
 
     public function order(Request $request){
-        $request->validate([
+        $data = $request->input('orders');
+        $orders = json_decode($data, true);
 
-            'item_id' => 'required|array',
-            'item_id.*' => 'exists:items,id',
-            'purchase_quantity' => 'required|array',
-            'purchase_quantity.*' => 'integer|min:1',
+        $order_id = Order::create([
+            'user_id' => auth()->id(),
+            'order_date' => now()
+        ])->id;
 
-        ]);
+        foreach ($orders as $order) {
+            $item = Item::find($order['id']);
 
-        $order = auth()->user()->orders()->create(['order_date' => now()]);
+            if ($item && $item->stok >= $order['count']) {
+                $item->stok -= $order['count'];
+                $item->save();
 
-        foreach ($request->item_id as $index => $itemId) {
-            $order->detail_order()->create([
-                'item_id' => $itemId,
-                'purchase_quantity' => $request->purchase_quantity[$index],
-            ]);
+                DetailOrder::create([
+                    'order_id' => $order_id,
+                    'item_id' => $item->id,
+                    'purchase_quantity' => $order['count']
+                ]);
+            } else {
+                return redirect()->route('cashier')->with('error', 'Failed to place the order');
+            }
         }
+        return redirect()->route('cashier')->with('success', 'Order successfully created');
 
-        return redirect()->route('cashier')->with('success', 'Order placed successfully.');
     }
 
+    public function orderHistory()
+    {
+       $orders = DetailOrder::with(['order.user', 'item'])->whereHas('order',function ($query) { $query->where('user_id', auth()->id())->whereDate('order_date', Carbon::today());})->get();
+        
+        return view('cashier.order', compact('orders'));
+    }
 }

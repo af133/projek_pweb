@@ -1,2 +1,2 @@
 import './bootstrap';
-import './formOrders.js';
+import './formOrder.js';

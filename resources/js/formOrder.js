@@ -41,9 +41,9 @@ document.addEventListener('DOMContentLoaded', function () {
         priceOrderFix.innerText = newTotal;
 
     });
+    let selectedProductId = null;
 
-
-    window.orderNow = function (productName, productImageSrc, productPrice) {
+    window.orderNow = function (id,productName, productImageSrc, productPrice) {
 
         const orderElement = document.getElementById('order');
 
@@ -54,10 +54,11 @@ document.addEventListener('DOMContentLoaded', function () {
         const nameProductFix = document.getElementById('nameProductFix');
 
         const imgOrderFix = document.getElementById('imgOrderFix');
-
+        
         if (orderElement.classList.contains('hidden')) {
-
+            
             orderElement.classList.remove('hidden');
+            selectedProductId = id;;
             price = parseInt(productPrice);
             nameProductElement.innerText = productName;
             imageProductElement.src = productImageSrc;
@@ -138,6 +139,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     addOrderButton.addEventListener('click', function () {
+         const id = selectedProductId;
 
         const name = document.getElementById('nameProduct').innerText;
 
@@ -147,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const price = parseInt(document.getElementById('totalPrice').innerText.replace(/[^0-9]/g, '')) || 0;
 
-        orders.push({ name, image, count, price });
+         orders.push({ id, name, image, count, price }); 
 
         renderOrderChart();
     });
