@@ -56,7 +56,7 @@
                 y: {
                     beginAtZero: true,
                     ticks: {
-                        callback: value => 'Rp ' + value.toLocaleString()
+                        callback: value => '$ ' + value.toLocaleString()
                     }
                 }
             }
