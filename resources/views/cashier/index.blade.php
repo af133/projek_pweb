@@ -40,7 +40,7 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         function filterCategory() {
-        const selected = $('#category').val();
+            const selected = $('#category').val();
 
         $('[data-category]').each(function () {
             const category = $(this).data('category');
@@ -56,6 +56,8 @@
     $(document).ready(function () {
         filterCategory();
         $('#category').on('change', filterCategory);
-    });
+    }); 
+    
+ 
     </script>
 </x-layouts.app >

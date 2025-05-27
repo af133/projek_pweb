@@ -86,12 +86,11 @@ document.addEventListener('DOMContentLoaded', function () {
             total += order.price * order.count;
         });
 
-        totalPriceElement.innerText = `Rp ${total.toLocaleString()}`;
+        totalPriceElement.innerText = `$ ${total.toLocaleString()}`;
         ordersInput.value = JSON.stringify(orders);
         totalPriceInput.value = total;
     }
 
-    // ⛳ Pindahkan event listener ini ke luar renderOrderChart
     document.getElementById('orderChartContainer').addEventListener('click', function (e) {
         if (e.target.classList.contains('removeOrder')) {
             const index = e.target.getAttribute('data-index');

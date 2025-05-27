@@ -25,7 +25,7 @@
                 <label for="">Quantity: </label>
                 <input type="integer" id="countOrders"  class="border-2 border-gray-600  w-full h-[1.5rem] text-center" value="1"  >
             </div>
-            <p class="mt-1">Prices: Rp<span id="totalPrice"></span></p>
+            <p class="mt-1">Prices: $<span id="totalPrice"></span></p>
         </div>
         
     </div>
