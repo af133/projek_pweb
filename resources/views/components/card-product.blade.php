@@ -19,11 +19,11 @@
         </h1>
 
         <div class="flex justify-between text-[0.65rem] text-gray-700 dark:text-gray-300 mb-1">
-            <p><strong>$:</strong> {{ $datum['price'] }}</p>
+            <p><strong>Rp.:</strong> {{ $datum['price'] }}</p>
             <p><strong>Stok:</strong> {{ $datum['stok'] }}</p>
         </div>
-       <button onclick='orderNow(@json($datum["id"]), @json($datum["item_name"]), @json($pathGambar), @json($datum["price"]))'class="w-full text-[0.7rem] px-2 py-1 font-semibold rounded-md bg-[#D1293F] text-white border-2 cursor-pointer border-[#D1293F] hover:bg-white hover:text-[#D1293F] dark:hover:bg-gray-700 transition">Order
-       </button>
+        <button onclick='orderNow(@json($datum["id"]), @json($datum["item_name"]), @json($pathGambar), @json($datum["price"]))'class="w-full text-[0.7rem] px-2 py-1 font-semibold rounded-md bg-[#D1293F] text-white border-2 cursor-pointer border-[#D1293F] hover:bg-white hover:text-[#D1293F] dark:hover:bg-gray-700 transition">Order
+        </button>
 
     </div>
 </div>

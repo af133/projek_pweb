@@ -2,7 +2,7 @@
     <div class="flex justify-between items-center mb-4">
         <h1 class="text-xl font-semibold text-gray-800 dark:text-gray-200">Stock Management</h1>
         <a href="{{ route('editOrcreate') }}"
-           class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded shadow transition">
+            class="bg-blue-600 hover:bg-blue-700 text-white font-medium px-5 py-2 rounded shadow transition">
             + Add Item
         </a>
     </div>
@@ -35,7 +35,7 @@
                         <td class="py-3 px-4">{{ $item->category->category_item_name ?? '-' }}</td>
                         <td class="py-3 px-4 text-center">
                             <a href="{{ route('editOrcreate', $item->id) }}"
-                               class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition">
+                                class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded transition">
                                 Edit
                             </a>
                         </td>
@@ -45,7 +45,7 @@
                         <td colspan="6" class="py-6 text-center text-gray-500 dark:text-gray-400">
                             No items found.
                             <a href="{{ route('editOrcreate') }}"
-                               class="ml-3 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+                                class="ml-3 inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
                                 + Add Your First Item
                             </a>
                         </td>

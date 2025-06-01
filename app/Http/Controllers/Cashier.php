@@ -51,7 +51,7 @@ class Cashier extends Controller
 
     public function orderHistory()
     {
-       $orders = DetailOrder::with(['order.user', 'item'])->whereHas('order',function ($query) { $query->where('user_id', auth()->id())->whereDate('order_date', Carbon::today());})->get();
+        $orders = DetailOrder::with(['order.user', 'item'])->whereHas('order',function ($query) { $query->where('user_id', auth()->id())->whereDate('order_date', Carbon::today());})->get();
         
         return view('cashier.order', compact('orders'));
     }

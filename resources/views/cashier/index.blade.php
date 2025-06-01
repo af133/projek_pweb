@@ -58,6 +58,6 @@
         $('#category').on('change', filterCategory);
     }); 
     
- 
+
     </script>
 </x-layouts.app >

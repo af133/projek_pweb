@@ -15,7 +15,7 @@ class StockManagement extends Controller
         return view('stock_management.index', compact('items'));
     }
 
-   public function indexCreateOrEdit($id = null) {
+    public function indexCreateOrEdit($id = null) {
     $categories = CategoryItem::all();
     $item = null;
     if ($id) {
