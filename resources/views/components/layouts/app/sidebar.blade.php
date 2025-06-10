@@ -13,23 +13,19 @@
                 <x-app-logo />
             </a>
 
-            <flux:navlist variant="outline">
-                <flux:navlist.group :heading="__('Platform')" class="grid">
-                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" >{{ __('Dashboard') }}</flux:navlist.item>
-                    <flux:navlist.item icon="shopping-cart" :href="route('cashier')" :current="request()->routeIs('cashier')" >{{ __('Cashier') }}</flux:navlist.item>
-                    <flux:navlist.item icon="shopping-bag" :href="route('order_history')" :current="request()->routeIs('order_history')" >{{ __('Orders') }}</flux:navlist.item>
-                    <flux:navlist.item icon="document-chart-bar" :href="route('stock_management')" :current="request()->routeIs('stock_management')" >{{ __('Stock Management') }}</flux:navlist.item>
-                    <flux:navlist.item icon="document-currency-dollar" :href="route('report')" :current="request()->routeIs('cashier_report')" >{{ __('Sales Report') }}</flux:navlist.item>
+            <flux:spacer/>
+            
+            <flux:navlist class="" variant="outline">
+                <flux:navlist.group :heading="__('')" class="grid">
+                    <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" class="justify-center">{{ __('') }}</flux:navlist.item>
+                    <flux:navlist.item icon="shopping-cart" :href="route('cashier')" :current="request()->routeIs('cashier')" class="justify-center">{{ __('') }}</flux:navlist.item>
+                    <flux:navlist.item icon="shopping-bag" :href="route('order_history')" :current="request()->routeIs('order_history')" class="justify-center">{{ __('') }}</flux:navlist.item>
+                    <flux:navlist.item icon="document-chart-bar" :href="route('stock_management')" :current="request()->routeIs('stock_management')" class="justify-center">{{ __('') }}</flux:navlist.item>
+                    <flux:navlist.item icon="document-currency-dollar" :href="route('report')" :current="request()->routeIs('cashier_report')" class="justify-center">{{ __('') }}</flux:navlist.item>
                 </flux:navlist.group>
-            </flux:navlist>
+            </flux:navlist> 
 
             <flux:spacer />
-
-            <flux:navlist variant="outline">
-                <flux:navlist.item icon="book-open-text" href="#" >
-                {{ __('Documentation') }}
-                </flux:navlist.item>
-            </flux:navlist>
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">
