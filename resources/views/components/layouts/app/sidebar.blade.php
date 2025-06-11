@@ -3,18 +3,13 @@
     <head>
         @include('partials.head')
     </head>
-    <body class="min-h-screen bg-white dark:bg-zinc-800 ">
+    <body class="min-h-screen bg-[white] dark:bg-zinc-800 ">
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900">
+        <flux:sidebar sticky stashable class="border-e border-zinc-200 bg-[#225E00] dark:border-zinc-700 dark:bg-zinc-900">
             <flux:sidebar.toggle class="lg:hidden" icon="x-mark" />
             @vite('resources/js/app.js')
             
-            {{-- <a href="{{ route('dashboard') }}" class="me-5 flex items-center space-x-2 rtl:space-x-reverse" wire:navigate>
-                <x-app-logo />
-            </a> --}}
-            
             <flux:spacer/>
-            
             <flux:navlist class="" variant="outline">
                 <flux:navlist.group :heading="__('')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" class="justify-center">{{ __('') }}</flux:navlist.item>
@@ -29,11 +24,7 @@
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">
-                <flux:profile
-                    :name="auth()->user()->name"
-                    :initials="auth()->user()->initials()"
-                    icon-trailing="chevrons-up-down"
-                />
+                
 
                 <flux:menu class="w-[220px]">
                     <flux:menu.radio.group>
