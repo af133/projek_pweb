@@ -1,7 +1,6 @@
-
-document.addEventListener('DOMContentLoaded', function () {
-    const totalPriceElement = document.querySelector('.totalPriceFix');
-    const ordersInput = document.getElementById('ordersInput');
+$(document).ready(function () {
+    const $totalPriceElement = $('.totalPriceFix');
+    const $ordersInput = $('#ordersInput');
     let orders = [];
 
     window.orderNow = function (id, productName, productImageSrc, productPrice) {
@@ -23,13 +22,13 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function renderOrderChart() {
-        const container = document.getElementById('orderChartContainer');
-        container.innerHTML = '';
+        const $container = $('#orderChartContainer');
+        $container.empty();
         let total = 0;
 
         orders.forEach((order, index) => {
             const chartHTML = `
-                <div class="flex mt-5  rounded-lg p-3">
+                <div class="flex mt-5 rounded-lg p-3">
                     <div class="flex-1 h-20 overflow-hidden rounded-lg">
                         <img src="${order.image}" class="w-full h-full object-cover" alt="Preview">
                     </div>
@@ -63,44 +62,36 @@ document.addEventListener('DOMContentLoaded', function () {
                 </div>
             `;
 
-            container.insertAdjacentHTML('beforeend', chartHTML);
+            $container.append(chartHTML);
             total += order.price * order.count;
         });
 
-        totalPriceElement.innerText = `$ ${total.toLocaleString()}`;
-        ordersInput.value = JSON.stringify(orders);
+        $totalPriceElement.text(`$ ${total.toLocaleString()}`);
+        $ordersInput.val(JSON.stringify(orders));
 
-        // Event input untuk update count & total
-        document.querySelectorAll('.order-count-input').forEach(input => {
-            input.addEventListener('input', function () {
-                const index = this.getAttribute('data-index');
-                const newCount = parseInt(this.value);
-                if (!isNaN(newCount) && newCount > 0) {
-                    orders[index].count = newCount;
-                    renderOrderChart();
-                }
-            });
+        $('.order-count-input').off('input').on('input', function () {
+            const index = $(this).data('index');
+            const newCount = parseInt($(this).val());
+            if (!isNaN(newCount) && newCount > 0) {
+                orders[index].count = newCount;
+                renderOrderChart();
+            }
         });
     }
 
-    // Remove order
-    document.getElementById('orderChartContainer').addEventListener('click', function (e) {
-        if (e.target.classList.contains('removeOrder')) {
-            const index = e.target.getAttribute('data-index');
-            orders.splice(index, 1);
-            renderOrderChart();
-        }
+    $('#orderChartContainer').on('click', '.removeOrder', function () {
+        const index = $(this).data('index');
+        orders.splice(index, 1);
+        renderOrderChart();
     });
 
-    // Prevent empty cart checkout
-    document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+    $('#checkoutForm').on('submit', function (e) {
         if (orders.length <= 0) {
             e.preventDefault();
             alert('Keranjang kosong! Silakan tambahkan barang.');
             return;
         }
 
-        ordersInput.value = JSON.stringify(orders);
+        $ordersInput.val(JSON.stringify(orders));
     });
 });
-
