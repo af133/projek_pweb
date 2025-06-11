@@ -47,6 +47,7 @@
             <div class="flex-1"></div>
             
             <flux:spacer/>
+            
             <flux:navlist class="" variant="outline">
                 <flux:navlist.group :heading="__('')" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" class="justify-center">{{ __('') }}</flux:navlist.item>
@@ -61,7 +62,11 @@
 
             <!-- Desktop User Menu -->
             <flux:dropdown position="bottom" align="start">
-                
+                <flux:profile
+                    :name="auth()->user()->name"
+                    :initials="auth()->user()->initials()"
+                    icon-trailing="chevrons-up-down"
+                />
 
                 <flux:menu class="w-[220px]">
                     <flux:menu.radio.group>

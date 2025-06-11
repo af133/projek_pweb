@@ -1,25 +1,52 @@
-
 document.addEventListener('DOMContentLoaded', function () {
+    const closeButton = document.getElementById('close');
+    const countElement = document.getElementById('countOrders');
+    const priceProductElement = document.getElementById('totalPrice');
+    const countOrderFix = document.getElementById('countOrderFix');
+    const priceOrderFix = document.getElementById('priceOrderFix');
+    const addOrderButton = document.getElementById('addOrder');
     const totalPriceElement = document.querySelector('.totalPriceFix');
     const ordersInput = document.getElementById('ordersInput');
+    const totalPriceInput = document.getElementById('totalPriceInput');
+
+    let price = 0;
     let orders = [];
+    let selectedProductId = null;
+
+    closeButton.addEventListener('click', function () {
+        document.getElementById('order').classList.add('hidden');
+    });
+
+    countElement.addEventListener('input', () => {
+        const newCount = parseInt(countElement.value) || 1;
+        const newTotal = price * newCount;
+        priceProductElement.innerText = newTotal;
+        countOrderFix.innerText = newCount;
+        priceOrderFix.innerText = newTotal;
+    });
 
     window.orderNow = function (id, productName, productImageSrc, productPrice) {
-        const existingOrderIndex = orders.findIndex(order => order.id === id);
+        const orderElement = document.getElementById('order');
+        const nameProductElement = document.getElementById('nameProduct');
+        const imageProductElement = document.getElementById('productImageOrder');
+        const nameProductFix = document.getElementById('nameProductFix');
+        const imgOrderFix = document.getElementById('imgOrderFix');
 
-        if (existingOrderIndex !== -1) {
-            orders[existingOrderIndex].count += 1;
+        if (orderElement.classList.contains('hidden')) {
+            orderElement.classList.remove('hidden');
+            selectedProductId = id;
+            price = parseInt(productPrice);
+            nameProductElement.innerText = productName;
+            imageProductElement.src = productImageSrc;
+            countElement.value = 1;
+            priceProductElement.innerText = price;
+            nameProductFix.innerText = productName;
+            imgOrderFix.src = productImageSrc;
+            countOrderFix.innerText = 1;
+            priceOrderFix.innerText = price;
         } else {
-            orders.push({
-                id: id,
-                name: productName,
-                image: productImageSrc,
-                count: 1,
-                price: parseInt(productPrice)
-            });
+            orderElement.classList.add('hidden');
         }
-
-        renderOrderChart();
     };
 
     function renderOrderChart() {
@@ -29,61 +56,41 @@ document.addEventListener('DOMContentLoaded', function () {
 
         orders.forEach((order, index) => {
             const chartHTML = `
-                <div class="flex mt-5  rounded-lg p-3">
+                <div class="flex mt-5 border-t-2 pt-4">
                     <div class="flex-1 h-20 overflow-hidden rounded-lg">
-                        <img src="${order.image}" class="w-full h-full object-cover" alt="Preview">
+                        <img src="${order.image}" class="w-full object-cover" alt="Preview">
                     </div>
-                    <div class="flex-1 mx-2 text-sm">
-                        <p class="font-bold text-center mb-2">${order.name}</p>
+                    <div class="flex-1 mx-1 text-sm">
+                        <p class="font-bold text-center">${order.name}</p>
                         <table class="w-full">
                             <tr>
                                 <td class="font-bold w-[4rem]">Count</td>
                                 <td class="font-bold px-1">:</td>
-                                <td>
-                                    <input 
-                                        type="number" 
-                                        value="${order.count}" 
-                                        min="1" 
-                                        class="order-count-input w-16 px-2 py-1 border-2 border-gray-400 rounded-md focus:outline-none focus:border-blue-500" 
-                                        data-index="${index}">
-                                </td>
+                                <td><p>${order.count}</p></td>
                             </tr>
                             <tr>
                                 <td class="font-bold">Price</td>
                                 <td class="font-bold px-1">:</td>
-                                <td><p>$${order.price}</p></td>
+                                <td><p>${order.price}</p></td>
                             </tr>
                         </table>
                     </div>
                     <div class="flex-1 flex justify-end items-center">
-                        <button class="removeOrder border-2 px-2 py-1 mx-1 rounded-md bg-[#225E00] text-white hover:bg-red-500 font-bold border-[#225E00]" data-index="${index}">
+                        <button class="removeOrder border-2 px-2 py-1 mx-1 rounded-md bg-[#cb172f] text-white hover:bg-red-500 font-bold border-[#cb172f]" data-index="${index}">
                             Remove
                         </button>
                     </div>
                 </div>
             `;
-
             container.insertAdjacentHTML('beforeend', chartHTML);
             total += order.price * order.count;
         });
 
         totalPriceElement.innerText = `$ ${total.toLocaleString()}`;
         ordersInput.value = JSON.stringify(orders);
-
-        // Event input untuk update count & total
-        document.querySelectorAll('.order-count-input').forEach(input => {
-            input.addEventListener('input', function () {
-                const index = this.getAttribute('data-index');
-                const newCount = parseInt(this.value);
-                if (!isNaN(newCount) && newCount > 0) {
-                    orders[index].count = newCount;
-                    renderOrderChart();
-                }
-            });
-        });
+        totalPriceInput.value = total;
     }
 
-    // Remove order
     document.getElementById('orderChartContainer').addEventListener('click', function (e) {
         if (e.target.classList.contains('removeOrder')) {
             const index = e.target.getAttribute('data-index');
@@ -92,15 +99,26 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-    // Prevent empty cart checkout
+    addOrderButton.addEventListener('click', function () {
+        const id = selectedProductId;
+        const name = document.getElementById('nameProduct').innerText;
+        const image = document.getElementById('productImageOrder').src;
+        const count = parseInt(document.getElementById('countOrders').value) || 1;
+        const price = parseInt(document.getElementById('totalPrice').innerText.replace(/[^0-9]/g, '')) || 0;
+
+        orders.push({ id, name, image, count, price });
+        renderOrderChart();
+        document.getElementById('order').classList.add('hidden');
+    });
+
     document.getElementById('checkoutForm').addEventListener('submit', function (e) {
         if (orders.length <= 0) {
             e.preventDefault();
             alert('Keranjang kosong! Silakan tambahkan barang.');
             return;
         }
-
         ordersInput.value = JSON.stringify(orders);
+        const total = orders.reduce((sum, item) => sum + item.price * item.count, 0);
+        totalPriceInput.value = total;
     });
 });
-
