@@ -4,9 +4,9 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Item;
-
-class StockManagement extends Component
+class MakeOrder extends Component
 {
+    
     public $search = '';
 
     public function render()
@@ -19,8 +19,9 @@ class StockManagement extends Component
             ->with('category')
             ->get();
 
-        return view('livewire.stock-management', [
+        return view('livewire.make-order', [
             'items' => $items
         ]);
     }
+
 }

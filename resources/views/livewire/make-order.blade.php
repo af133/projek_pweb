@@ -1,5 +1,4 @@
-<x-layouts.app :title="__('Cashier Dashboard')">
-    <div class="mb-4">
+ <div class="mb-4">
         <select id="category" name="category"
             class="p-2 border border-[#51de00] dark:border-gray-600 rounded-md 
                 bg-[#235e008e] dark:bg-gray-800 text-[white] dark:text-gray-100 transition duration-300">
@@ -59,5 +58,4 @@
     }); 
     
 
-    </script>
-</x-layouts.app >
+</script>
