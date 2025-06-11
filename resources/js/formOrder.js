@@ -1,15 +1,6 @@
-document.addEventListener('DOMContentLoaded', function () {
-    const closeButton = document.getElementById('close');
-    const countElement = document.getElementById('countOrders');
-    const priceProductElement = document.getElementById('totalPrice');
-    const countOrderFix = document.getElementById('countOrderFix');
-    const priceOrderFix = document.getElementById('priceOrderFix');
-    const addOrderButton = document.getElementById('addOrder');
-    const totalPriceElement = document.querySelector('.totalPriceFix');
-    const ordersInput = document.getElementById('ordersInput');
-    const totalPriceInput = document.getElementById('totalPriceInput');
-
-    let price = 0;
+$(document).ready(function () {
+    const $totalPriceElement = $('.totalPriceFix');
+    const $ordersInput = $('#ordersInput');
     let orders = [];
     let selectedProductId = null;
 
@@ -50,13 +41,13 @@ document.addEventListener('DOMContentLoaded', function () {
     };
 
     function renderOrderChart() {
-        const container = document.getElementById('orderChartContainer');
-        container.innerHTML = '';
+        const $container = $('#orderChartContainer');
+        $container.empty();
         let total = 0;
 
         orders.forEach((order, index) => {
             const chartHTML = `
-                <div class="flex mt-5 border-t-2 pt-4">
+                <div class="flex mt-5 rounded-lg p-3">
                     <div class="flex-1 h-20 overflow-hidden rounded-lg">
                         <img src="${order.image}" class="w-full object-cover" alt="Preview">
                     </div>
@@ -82,43 +73,37 @@ document.addEventListener('DOMContentLoaded', function () {
                     </div>
                 </div>
             `;
-            container.insertAdjacentHTML('beforeend', chartHTML);
+
+            $container.append(chartHTML);
             total += order.price * order.count;
         });
 
-        totalPriceElement.innerText = `$ ${total.toLocaleString()}`;
-        ordersInput.value = JSON.stringify(orders);
-        totalPriceInput.value = total;
+        $totalPriceElement.text(`$ ${total.toLocaleString()}`);
+        $ordersInput.val(JSON.stringify(orders));
+
+        $('.order-count-input').off('input').on('input', function () {
+            const index = $(this).data('index');
+            const newCount = parseInt($(this).val());
+            if (!isNaN(newCount) && newCount > 0) {
+                orders[index].count = newCount;
+                renderOrderChart();
+            }
+        });
     }
 
-    document.getElementById('orderChartContainer').addEventListener('click', function (e) {
-        if (e.target.classList.contains('removeOrder')) {
-            const index = e.target.getAttribute('data-index');
-            orders.splice(index, 1);
-            renderOrderChart();
-        }
-    });
-
-    addOrderButton.addEventListener('click', function () {
-        const id = selectedProductId;
-        const name = document.getElementById('nameProduct').innerText;
-        const image = document.getElementById('productImageOrder').src;
-        const count = parseInt(document.getElementById('countOrders').value) || 1;
-        const price = parseInt(document.getElementById('totalPrice').innerText.replace(/[^0-9]/g, '')) || 0;
-
-        orders.push({ id, name, image, count, price });
+    $('#orderChartContainer').on('click', '.removeOrder', function () {
+        const index = $(this).data('index');
+        orders.splice(index, 1);
         renderOrderChart();
-        document.getElementById('order').classList.add('hidden');
     });
 
-    document.getElementById('checkoutForm').addEventListener('submit', function (e) {
+    $('#checkoutForm').on('submit', function (e) {
         if (orders.length <= 0) {
             e.preventDefault();
             alert('Keranjang kosong! Silakan tambahkan barang.');
             return;
         }
-        ordersInput.value = JSON.stringify(orders);
-        const total = orders.reduce((sum, item) => sum + item.price * item.count, 0);
-        totalPriceInput.value = total;
+
+        $ordersInput.val(JSON.stringify(orders));
     });
 });
