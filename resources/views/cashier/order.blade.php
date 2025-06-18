@@ -1,35 +1,43 @@
 <x-layouts.app :title="__('Order History')">
-<p class="text-[#34364A] font-bold text-3xl">Histori Transaksi</p>
-<p class="text-[#34364A] my-4">Daftar penjualan toko hari ini</p>
-<div class="overflow-x-auto">
-    <table class="w-full table-auto text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-200">
-            <tr>
-                <th class="px-4 py-2">Item Name</th>
-                <th class="px-4 py-2">Image</th>
-                <th class="px-4 py-2">Qty</th>
-                <th class="px-4 py-2">Total Price</th>
-                <th class="px-4 py-2">Order Date</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach ( $orders as $order)
-                <tr class="bg-[#EAEFC4] border-b dark:bg-gray-800 dark:border-gray-700">
-                    <td class="px-4 py-2">{{ $order['item']['item_name'] }}</td>
-                    <td class="px-4 py-2">
-                        <img src="{{ asset('storage/' . $order['item']['path_item']) }}" alt="" class="w-16 h-16 object-cover rounded">
-                    </td>
-                    <td class="px-4 py-2">{{ $order['purchase_quantity'] }}</td>
-                    <td class="px-4 py-2">
-                        Rp {{ number_format($order['purchase_quantity'] * $order['item']['price'], 0, ',', '.') }}
-                    </td>
-                    <td class="px-4 py-2">
-                        {{ \Carbon\Carbon::parse($order['order']['order_date'])->format('d M Y H:i') }}
-                    </td>
+<div class="min-h-screen flex flex-col items-center py-8">
+    <!-- Judul dan Subjudul -->
+    <div class="w-full max-w-5xl flex flex-col gap-1 mb-6">
+        <h1 class="text-3xl font-bold text-gray-800">Histori Transaksi</h1>
+        <p class="text-gray-500">Daftar penjualan toko hari ini</p>
+    </div>
+    <!-- Tabel -->
+    <div class="w-full max-w-5xl bg-white rounded-lg overflow-hidden">
+        <table class="w-full table-auto text-base">
+            <thead>
+                <tr class="bg-green-700 text-white">
+                    <th class="py-4 px-6 text-left w-[40%]">Product</th>
+                    <th class="py-4 px-6 text-center w-[20%]">Date</th>
+                    <th class="py-4 px-6 text-center w-[20%]">Price</th>
+                    <th class="py-4 px-6 text-center w-[20%]">Quantity</th>
                 </tr>
-            @endforeach
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody class="bg-[#f3ffe4]">
+                @foreach ($orders as $order)
+                    <tr class="border-b border-gray-200 last:border-0">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-3">
+                                <img src="{{ asset('storage/' . $order['item']['path_item']) }}" alt="{{ $order['item']['item_name'] }}"
+                                class="w-full max-w-[80px] h-auto object-contain bg-white rounded border border-gray-200">
 
-</x-layouts.app >
+                                <span class="font-medium text-gray-900">{{ $order['item']['item_name'] }}</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-6 text-center">{{ \Carbon\Carbon::parse($order['order']['order_date'])->format('d-m-Y H:i') }}</td>
+                        <td class="py-4 px-6 text-center">Rp. {{ number_format($order['purchase_quantity'] * $order['item']['price'], 0, ',', '.') }}</td>
+                        <td class="py-4 px-6 text-center">{{ $order['purchase_quantity'] }}</td>
+                    </tr>
+                @endforeach
+            </tbody>
+        </table>
+        <div class="mt-4">
+                {{ $orders->links() }}
+        </div>
+
+    </div>
+</div>
+</x-layouts.app>

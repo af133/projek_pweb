@@ -67,49 +67,57 @@ new #[Layout('components.layouts.auth')] class extends Component {
         $this->redirectRoute('login', navigate: true);
     }
 }; ?>
-
-<div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Reset password')" :description="__('Please enter your new password below')" />
+<div class="flex flex-col items-center justify-center gap-8 max-w-md w-full mx-auto p-6 rounded-xl shadow-lg bg-white dark:bg-zinc-900">
+    <x-auth-header 
+        :title="__('Ubah Password')" 
+        :description="__('Silakan masukkan password baru Anda di bawah ini')" 
+    />
 
     <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
+    <x-auth-session-status class="text-center text-sm text-green-500" :status="session('status')" />
 
-    <form wire:submit="resetPassword" class="flex flex-col gap-6">
-        <!-- Email Address -->
+    <form wire:submit="resetPassword" class="flex flex-col gap-6 w-full">
+        <!-- Email -->
         <flux:input
             wire:model="email"
-            :label="__('Email')"
+            :label="__('Alamat Email')"
             type="email"
             required
             autocomplete="email"
+            viewable
         />
 
-        <!-- Password -->
+        <!-- Password Baru -->
         <flux:input
             wire:model="password"
-            :label="__('Password')"
+            :label="__('Password Baru')"
             type="password"
             required
             autocomplete="new-password"
-            :placeholder="__('Password')"
+            placeholder="••••••••"
             viewable
         />
 
-        <!-- Confirm Password -->
+        <!-- Konfirmasi Password -->
         <flux:input
             wire:model="password_confirmation"
-            :label="__('Confirm password')"
+            :label="__('Konfirmasi Password')"
             type="password"
             required
             autocomplete="new-password"
-            :placeholder="__('Confirm password')"
+            placeholder="••••••••"
             viewable
         />
 
-        <div class="flex items-center justify-end">
-            <flux:button type="submit" variant="primary" class="w-full">
-                {{ __('Reset password') }}
-            </flux:button>
-        </div>
+        <flux:button type="submit" variant="primary" class="w-full">
+            {{ __('Simpan Password Baru') }}
+        </flux:button>
     </form>
+
+    <div class="text-sm text-zinc-500 text-center mt-4">
+        {{ __('Sudah ingat password lama Anda?') }}
+        <flux:link :href="route('login')" class="text-primary font-medium hover:underline" wire:navigate>
+            {{ __('Masuk sekarang') }}
+        </flux:link>
+    </div>
 </div>

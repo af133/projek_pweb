@@ -35,65 +35,78 @@ new #[Layout('components.layouts.auth')] class extends Component {
     }
 }; ?>
 
-<div class="flex flex-col gap-6">
-    <x-auth-header :title="__('Create an account')" :description="__('Enter your details below to create your account')" />
+<div class="flex-1 bg-white flex items-center justify-center p-8">
+    <div class="w-full max-w-md">
+        <div class="flex flex-col gap-6">
+            <!-- Heading -->
+            <div class="leading-none">
+                <h1 class="text-4xl font-black text-black">Register</h1>
+                <div class="h-2 rounded-full w-[40%]" style="background: linear-gradient(90deg, 
+                    #346473 0%, 
+                    #25A55F 40%, 
+                    #9BDF46 100%)">
+                </div>
+            </div>
 
-    <!-- Session Status -->
-    <x-auth-session-status class="text-center" :status="session('status')" />
+            <!-- Session Status -->
+            <x-auth-session-status class="text-center" :status="session('status')" />
 
-    <form wire:submit="register" class="flex flex-col gap-6">
-        <!-- Name -->
-        <flux:input
-            wire:model="name"
-            :label="__('Name')"
-            type="text"
-            required
-            autofocus
-            autocomplete="name"
-            :placeholder="__('Full name')"
-        />
+            <!-- Form -->
+            <form wire:submit="register" class="flex flex-col gap-6">
+                <!-- Name -->
+                <flux:input
+                    wire:model="name"
+                    type="text"
+                    :label="__('Nama')"
+                    required
+                    autofocus
+                    autocomplete="name"
+                    :placeholder="__('Nama')"
+                />
 
-        <!-- Email Address -->
-        <flux:input
-            wire:model="email"
-            :label="__('Email address')"
-            type="email"
-            required
-            autocomplete="email"
-            placeholder="email@example.com"
-        />
+                <!-- Email Address -->
+                <flux:input
+                    wire:model="email"
+                    type="email"
+                    :label="__('Alamat Email')"
+                    required
+                    autocomplete="email"
+                    placeholder="Alamat Email"
+                />
 
-        <!-- Password -->
-        <flux:input
-            wire:model="password"
-            :label="__('Password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Password')"
-            viewable
-        />
+                <!-- Password -->
+                <flux:input
+                    wire:model="password"
+                    type="password"
+                    required
+                    :label="__('Password')"
+                    autocomplete="new-password"
+                    placeholder="Password"
+                    viewable
+                />
 
-        <!-- Confirm Password -->
-        <flux:input
-            wire:model="password_confirmation"
-            :label="__('Confirm password')"
-            type="password"
-            required
-            autocomplete="new-password"
-            :placeholder="__('Confirm password')"
-            viewable
-        />
+                <!-- Confirm Password -->
+                <flux:input
+                    wire:model="password_confirmation"
+                    type="password"
+                    required
+                    :label="__('Konfirmasi Password')"
+                    autocomplete="new-password"
+                    placeholder="Konfirmasi Password"
+                    viewable
+                />
 
-        <div class="flex items-center justify-end">
-            <flux:button type="submit" variant="primary" class="w-full">
-                {{ __('Create account') }}
-            </flux:button>
+                <div class="flex items-center justify-end">
+                    <flux:button type="submit" variant="primary" class="w-full">
+                        {{ __('Sign Up') }}
+                    </flux:button>
+                </div>
+            </form>
+
+            <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
+                {{ __('Telah mempunyai akun?') }}
+                <flux:link :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
+            </div>
         </div>
-    </form>
-
-    <div class="space-x-1 rtl:space-x-reverse text-center text-sm text-zinc-600 dark:text-zinc-400">
-        {{ __('Already have an account?') }}
-        <flux:link :href="route('login')" wire:navigate>{{ __('Log in') }}</flux:link>
     </div>
 </div>

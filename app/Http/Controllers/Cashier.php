@@ -10,15 +10,32 @@ use Illuminate\Http\Request;
 class Cashier extends Controller
 {
 
-    public function index()
+   public function index(Request $request)
     {
-        $items = Item::with('category')->where('user_id', auth()->id())->where('stok', '>', 0)->get()->groupBy(function($item) 
-        {
-            return optional($item->category)->category_item_name ?? 'Tanpa Kategori'; 
+        $search = $request->input('search');
+        $category = $request->input('category');
+
+        $query = Item::with('category')
+            ->where('user_id', auth()->id())
+            ->where('stok', '>', 0);
+
+        if ($search) {
+            $query->where('item_name', 'like', '%' . $search . '%');
+        }
+
+        if ($category && $category !== 'all') {
+            $query->whereHas('category', function ($q) use ($category) {
+                $q->where('category_item_name', $category);
+            });
+        }
+
+        $items = $query->get()->groupBy(function ($item) {
+            return optional($item->category)->category_item_name ?? 'Tanpa Kategori';
         });
 
-        return view('cashier.index',['items'=>$items]);
+        return view('cashier.index', compact('items', 'search', 'category'));
     }
+
 
     public function order(Request $request){
         $data = $request->input('orders');
@@ -50,11 +67,16 @@ class Cashier extends Controller
     }
 
     public function orderHistory()
-    {
-        $orders = DetailOrder::with(['order.user', 'item'])->whereHas('order',function ($query) { $query->where('user_id', auth()->id())->whereDate('order_date', Carbon::today());})->get();
-        
-        return view('cashier.order', compact('orders'));
-    }
+{
+    $orders = DetailOrder::with(['order.user', 'item'])
+        ->whereHas('order', function ($query) {
+            $query->where('user_id', auth()->id())
+                  ->whereDate('order_date', Carbon::today());
+        })
+        ->paginate(20); 
+
+    return view('cashier.order', compact('orders'));
+}
     public function report(Request $request)
     {
         $year = $request->get('year', now()->year);

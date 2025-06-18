@@ -10,7 +10,7 @@ class StockManagement extends Controller
 {
     public function index() {
         $userId = auth()->user()->id;
-        $items = Item::where('user_id', $userId)->with('category')->get();
+        $items = Item::where('user_id', $userId)->orderBy('stok','asc')->get();
         
         return view('stock_management.index', compact('items'));
     }

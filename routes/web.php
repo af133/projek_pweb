@@ -1,10 +1,12 @@
 <?php
 
+use App\Http\Controllers\Dashboard;
 use App\Http\Controllers\StockManagement;
 use Illuminate\Support\Facades\Route;
 use Livewire\Volt\Volt;
 use App\Http\Controllers\Home;
 use App\Http\Controllers\Cashier;
+use App\Http\Controllers\Daashboard ;
 
 Route::get('/',[Home::class,'index'])->name('home');
 
@@ -12,7 +14,7 @@ Route::get('/',[Home::class,'index'])->name('home');
 // -----------------------------------------------------------------
 // -----------------------------------------------------------------
 
-Route::view('dashboard', 'dashboard')->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('dashboard', [Dashboard::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 
 // -----------------------------------------------------------------

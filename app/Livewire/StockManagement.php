@@ -16,7 +16,7 @@ class StockManagement extends Component
             ->where(function($query) {
                 $query->where('item_name', 'like', '%' . $this->search . '%');
             })
-            ->with('category')
+            ->with('category')->orderBy('stok', 'asc')  ->orderBy('item_name', 'asc')  
             ->get();
 
         return view('livewire.stock-management', [
